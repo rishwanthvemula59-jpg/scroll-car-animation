@@ -1,0 +1,208 @@
+/* =============================================
+   ITZ BUNNY — Dark Scroll Car Animation
+   ============================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    overflow-x: hidden;
+    background: #0a0a0a;
+    color: #fff;
+}
+
+/* ── Section: tall enough so next content never overlaps ── */
+.section {
+    height: 400vh;
+    position: relative;
+    background: #0a0a0a;
+}
+
+/* ── Sticky track ────────────────────────────────────────── */
+.track {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0a0a0a;
+
+    /* Subtle dark grid overlay for depth */
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+}
+
+/* ── Road — looks like real tarmac ─────────────────────────
+   - Dark asphalt body
+   - White inset edge lines (box-shadow)
+   - Yellow dashed centre line (::before)
+   - Thin shoulder gradient (::after)
+   ─────────────────────────────────────────────────────── */
+.road {
+    width: 100vw;
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+
+    /* Asphalt colour with slight cross-grain texture */
+    background-color: #1a1a1b;
+    background-image:
+        repeating-linear-gradient(92deg,
+            rgba(255, 255, 255, 0.012) 0px,
+            rgba(255, 255, 255, 0.012) 1px,
+            transparent 1px,
+            transparent 6px),
+        linear-gradient(180deg,
+            #141414 0%,
+            #1d1d1e 12%,
+            #1a1a1b 88%,
+            #141414 100%);
+
+    /* ── White edge lines via inset box-shadow ── */
+    box-shadow:
+        inset 0 4px 0 2px rgba(255, 255, 255, 0.28),
+        inset 0 -4px 0 2px rgba(255, 255, 255, 0.28),
+        0 0 80px rgba(0, 0, 0, 0.9);
+}
+
+/* Yellow dashed centre line */
+.road-center {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 3;
+    background: repeating-linear-gradient(90deg,
+            #f5c518 0px,
+            #f5c518 40px,
+            transparent 40px,
+            transparent 84px);
+    opacity: 0.75;
+}
+
+/* Narrow dark shoulder strip at each edge */
+.road-shoulders {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    box-shadow:
+        inset 0 18px 14px -14px rgba(0, 0, 0, 0.5),
+        inset 0 -18px 14px -14px rgba(0, 0, 0, 0.5);
+}
+
+/* ── Car (SVG) ─────────────────────────────────────────────
+   viewBox is 200×200; nose faces DOWN in SVG.
+   rotate(-90deg) makes nose face RIGHT on screen.
+   ────────────────────────────────────────────────────── */
+.car {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    /* Rotate so the car faces right (nose points right) */
+    transform: rotate(-90deg);
+    transform-origin: center center;
+    /* Subtle lime ambient glow from underneath the car */
+    filter: drop-shadow(0 0 10px rgba(69, 219, 125, 0.18));
+}
+
+/* ── Neon trail growing behind the car ─────────────────── */
+.trail {
+    height: 200px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 0;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(69, 219, 125, 0.08) 50%,
+            rgba(69, 219, 125, 0.40) 100%);
+    box-shadow: 0 0 30px rgba(69, 219, 125, 0.1);
+}
+
+/* ── Headline letters ───────────────────────────────────── */
+.value-add {
+    font-size: 7rem;
+    font-weight: 900;
+    position: absolute;
+    left: 4%;
+    top: 25%;
+    z-index: 5;
+    display: flex;
+    gap: 0.1em;
+    pointer-events: none;
+    user-select: none;
+}
+
+.value-letter {
+    opacity: 0;
+    color: rgba(255, 255, 255, 0.88);
+    text-shadow:
+        0 0 30px rgba(200, 255, 0, 0.45),
+        0 0 60px rgba(200, 255, 0, 0.15);
+    transition: opacity 0.05s;
+    font-style: italic;
+    letter-spacing: 0.02em;
+}
+
+.value-space {
+    width: 0.4em;
+    display: inline-block;
+}
+
+/* ── Stat cards ─────────────────────────────────────────── */
+.text-box {
+    opacity: 0;
+    padding: 28px 30px;
+    border-radius: 10px;
+    position: absolute;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 16px;
+    line-height: 1.4;
+    transition: opacity 0.4s;
+}
+
+.num-box {
+    font-size: 56px;
+    font-weight: 700;
+    display: block;
+    line-height: 1;
+}
+
+#box1 {
+    background: #def54f;
+    color: #111;
+}
+
+#box2 {
+    background: #6ac9ff;
+    color: #111;
+}
+
+#box3 {
+    background: #333;
+    color: #fff;
+}
+
+#box4 {
+    background: #fa7328;
+    color: #111;
+}
